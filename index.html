@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workforce Attrition Analytics | Mohammad Faisal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root{
+    --bg:#0f1420; --card:#161d2e; --card-border:#242c40;
+    --text:#e8ebf3; --muted:#9aa4bd; --accent:#4f8cff; --accent2:#22c3a6;
+    --danger:#e0577a; --warn:#e0a83f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+  }
+  header{
+    padding:40px 24px 24px; max-width:1180px; margin:0 auto;
+  }
+  header h1{font-size:26px; font-weight:600; margin:0 0 6px;}
+  header p{color:var(--muted); margin:0; font-size:15px;}
+  .badges{margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;}
+  .badge{
+    background:var(--card); border:1px solid var(--card-border);
+    padding:5px 12px; border-radius:20px; font-size:12px; color:var(--muted);
+  }
+  main{max-width:1180px; margin:0 auto; padding:0 24px 60px;}
+  .kpi-row{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px;
+  }
+  .kpi{
+    background:var(--card); border:1px solid var(--card-border); border-radius:12px;
+    padding:18px 20px;
+  }
+  .kpi .label{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+  .kpi .value{font-size:28px; font-weight:600; margin-top:6px;}
+  .kpi .sub{font-size:12px; color:var(--muted); margin-top:4px;}
+  .grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+  }
+  .grid.full{grid-template-columns:1fr;}
+  .card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:12px;
+    padding:20px;
+  }
+  .card h2{font-size:15px; font-weight:600; margin:0 0 4px;}
+  .card .insight{font-size:12.5px; color:var(--muted); margin:0 0 14px;}
+  .chart-wrap{position:relative; height:260px;}
+  footer{
+    max-width:1180px; margin:0 auto; padding:20px 24px 40px;
+    color:var(--muted); font-size:12.5px; border-top:1px solid var(--card-border);
+  }
+  a{color:var(--accent);}
+  @media (max-width:820px){
+    .kpi-row{grid-template-columns:1fr 1fr;}
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Workforce attrition analytics</h1>
+  <p>Identifying the drivers of employee turnover across 1,470 employees, and where HR intervention would have the highest impact.</p>
+  <div class="badges">
+    <span class="badge">Power BI style dashboard</span>
+    <span class="badge">Python / pandas EDA</span>
+    <span class="badge">Public dataset · IBM HR Analytics</span>
+    <span class="badge">Built by Mohammad Faisal</span>
+  </div>
+</header>
+
+<main>
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="label">Total employees</div>
+      <div class="value" id="kpi-total">–</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Employees who left</div>
+      <div class="value" id="kpi-left">–</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Overall attrition rate</div>
+      <div class="value" id="kpi-rate">–</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Income gap (stayed vs left)</div>
+      <div class="value" id="kpi-income">–</div>
+      <div class="sub">Avg. monthly income, USD</div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-bottom:18px;">
+    <div class="card">
+      <h2>Attrition by department</h2>
+      <p class="insight">Sales and HR run notably hotter than R&D.</p>
+      <div class="chart-wrap"><canvas id="chartDept" role="img" aria-label="Bar chart of attrition rate by department"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Overtime is the single strongest signal</h2>
+      <p class="insight">Employees working overtime leave at ~3x the rate of those who don't.</p>
+      <div class="chart-wrap"><canvas id="chartOT" role="img" aria-label="Bar chart comparing attrition rate for employees with and without overtime"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-bottom:18px;">
+    <div class="card">
+      <h2>Attrition by job role</h2>
+      <p class="insight">Sales Representatives and Lab Technicians are the highest-risk roles.</p>
+      <div class="chart-wrap" style="height:320px;"><canvas id="chartRole" role="img" aria-label="Horizontal bar chart of attrition rate by job role"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Tenure curve</h2>
+      <p class="insight">Risk is highest in the first 2 years, then drops sharply.</p>
+      <div class="chart-wrap"><canvas id="chartTenure" role="img" aria-label="Line chart of attrition rate by years at company"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid full">
+    <div class="card">
+      <h2>Job satisfaction and work-life balance</h2>
+      <p class="insight">Both drive attrition, but work-life balance shows the steeper gradient at the low end.</p>
+      <div class="chart-wrap" style="height:280px;"><canvas id="chartSatWLB" role="img" aria-label="Grouped bar chart comparing attrition rate across job satisfaction and work-life balance levels"></canvas></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Dataset: IBM HR Analytics Employee Attrition &amp; Performance (public, 1,470 records, fictional data released by IBM for analytics practice).
+  Analysis and dashboard by Mohammad Faisal &middot; <a href="https://www.linkedin.com/in/muhammed-faisal-214255121" target="_blank" rel="noopener">LinkedIn</a>
+</footer>
+
+<script>
+async function loadData(){
+  const res = await fetch('data.json');
+  return res.json();
+}
+
+function fmtMoney(n){ return '$' + n.toLocaleString(); }
+
+Chart.defaults.color = '#9aa4bd';
+Chart.defaults.borderColor = '#242c40';
+Chart.defaults.font.family = "'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
+const palette = { blue:'#4f8cff', teal:'#22c3a6', coral:'#e0577a', amber:'#e0a83f', gray:'#5b6478' };
+
+loadData().then(data => {
+  document.getElementById('kpi-total').textContent = data.overall.total_employees.toLocaleString();
+  document.getElementById('kpi-left').textContent = data.overall.attrition_count.toLocaleString();
+  document.getElementById('kpi-rate').textContent = data.overall.attrition_rate_pct + '%';
+  document.getElementById('kpi-income').textContent = fmtMoney(data.avg_income_by_attrition.stayed - data.avg_income_by_attrition.left);
+
+  // Department
+  new Chart(document.getElementById('chartDept'), {
+    type: 'bar',
+    data: {
+      labels: data.by_department.map(d => d.department),
+      datasets: [{ label: 'Attrition rate %', data: data.by_department.map(d => d.attrition_rate_pct), backgroundColor: palette.coral, borderRadius: 4, maxBarThickness: 44 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+  });
+
+  // Overtime
+  new Chart(document.getElementById('chartOT'), {
+    type: 'bar',
+    data: {
+      labels: data.by_overtime.map(d => 'Overtime: ' + d.overtime),
+      datasets: [{ label: 'Attrition rate %', data: data.by_overtime.map(d => d.attrition_rate_pct), backgroundColor: [palette.gray, palette.coral], borderRadius: 4, maxBarThickness: 60 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+  });
+
+  // Job role (horizontal)
+  const roleSorted = [...data.by_job_role].sort((a,b) => a.attrition_rate_pct - b.attrition_rate_pct);
+  new Chart(document.getElementById('chartRole'), {
+    type: 'bar',
+    data: {
+      labels: roleSorted.map(d => d.job_role),
+      datasets: [{ label: 'Attrition rate %', data: roleSorted.map(d => d.attrition_rate_pct), backgroundColor: palette.blue, borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+  });
+
+  // Tenure line
+  new Chart(document.getElementById('chartTenure'), {
+    type: 'line',
+    data: {
+      labels: data.by_tenure.map(d => d.tenure_years + ' yrs'),
+      datasets: [{ label: 'Attrition rate %', data: data.by_tenure.map(d => d.attrition_rate_pct), borderColor: palette.teal, backgroundColor: 'rgba(34,195,166,0.12)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: palette.teal }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+  });
+
+  // Satisfaction vs WLB grouped
+  const levels = [1,2,3,4];
+  new Chart(document.getElementById('chartSatWLB'), {
+    type: 'bar',
+    data: {
+      labels: levels.map(l => 'Level ' + l),
+      datasets: [
+        { label: 'Job satisfaction', data: data.by_job_satisfaction.map(d => d.attrition_rate_pct), backgroundColor: palette.blue, borderRadius: 4, maxBarThickness: 36 },
+        { label: 'Work-life balance', data: data.by_worklife_balance.map(d => d.attrition_rate_pct), backgroundColor: palette.amber, borderRadius: 4, maxBarThickness: 36 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 12, boxHeight: 12 } } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } } }
+    }
+  });
+});
+</script>
+
+</body>
+</html>
