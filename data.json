@@ -1,0 +1,161 @@
+{
+  "overall": {
+    "total_employees": 1470,
+    "attrition_count": 237,
+    "attrition_rate_pct": 16.1
+  },
+  "by_department": [
+    {
+      "department": "Human Resources",
+      "attrition_rate_pct": 19.0,
+      "headcount": 63
+    },
+    {
+      "department": "Research & Development",
+      "attrition_rate_pct": 13.8,
+      "headcount": 961
+    },
+    {
+      "department": "Sales",
+      "attrition_rate_pct": 20.6,
+      "headcount": 446
+    }
+  ],
+  "by_overtime": [
+    {
+      "overtime": "No",
+      "attrition_rate_pct": 10.4
+    },
+    {
+      "overtime": "Yes",
+      "attrition_rate_pct": 30.5
+    }
+  ],
+  "by_job_role": [
+    {
+      "job_role": "Sales Representative",
+      "attrition_rate_pct": 39.8,
+      "headcount": 83
+    },
+    {
+      "job_role": "Laboratory Technician",
+      "attrition_rate_pct": 23.9,
+      "headcount": 259
+    },
+    {
+      "job_role": "Human Resources",
+      "attrition_rate_pct": 23.1,
+      "headcount": 52
+    },
+    {
+      "job_role": "Sales Executive",
+      "attrition_rate_pct": 17.5,
+      "headcount": 326
+    },
+    {
+      "job_role": "Research Scientist",
+      "attrition_rate_pct": 16.1,
+      "headcount": 292
+    },
+    {
+      "job_role": "Healthcare Representative",
+      "attrition_rate_pct": 6.9,
+      "headcount": 131
+    },
+    {
+      "job_role": "Manufacturing Director",
+      "attrition_rate_pct": 6.9,
+      "headcount": 145
+    },
+    {
+      "job_role": "Manager",
+      "attrition_rate_pct": 4.9,
+      "headcount": 102
+    },
+    {
+      "job_role": "Research Director",
+      "attrition_rate_pct": 2.5,
+      "headcount": 80
+    }
+  ],
+  "by_job_satisfaction": [
+    {
+      "level": 1,
+      "attrition_rate_pct": 22.8
+    },
+    {
+      "level": 2,
+      "attrition_rate_pct": 16.4
+    },
+    {
+      "level": 3,
+      "attrition_rate_pct": 16.5
+    },
+    {
+      "level": 4,
+      "attrition_rate_pct": 11.3
+    }
+  ],
+  "by_tenure": [
+    {
+      "tenure_years": "0-2",
+      "attrition_rate_pct": 28.9
+    },
+    {
+      "tenure_years": "3-5",
+      "attrition_rate_pct": 13.8
+    },
+    {
+      "tenure_years": "6-10",
+      "attrition_rate_pct": 12.3
+    },
+    {
+      "tenure_years": "11-20",
+      "attrition_rate_pct": 6.7
+    },
+    {
+      "tenure_years": "20+",
+      "attrition_rate_pct": 12.1
+    }
+  ],
+  "avg_income_by_attrition": {
+    "stayed": 6833,
+    "left": 4787
+  },
+  "by_worklife_balance": [
+    {
+      "level": 1,
+      "attrition_rate_pct": 31.2
+    },
+    {
+      "level": 2,
+      "attrition_rate_pct": 16.9
+    },
+    {
+      "level": 3,
+      "attrition_rate_pct": 14.2
+    },
+    {
+      "level": 4,
+      "attrition_rate_pct": 17.6
+    }
+  ],
+  "by_distance": [
+    {
+      "distance_km": "0-5",
+      "attrition_rate_pct": 13.8
+    },
+    {
+      "distance_km": "6-10",
+      "attrition_rate_pct": 14.5
+    },
+    {
+      "distance_km": "11-20",
+      "attrition_rate_pct": 20.0
+    },
+    {
+      "distance_km": "21-30",
+      "attrition_rate_pct": 22.1
+    }
+  ]
+}
